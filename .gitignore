@@ -1,0 +1,23 @@
+.DS_Store
+
+# Virtual Environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Python Setuptools
+out/
+dist/
+build/
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Visual Studio (code)
+.vs*
+/reports
