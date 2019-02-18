@@ -76,6 +76,12 @@ to run with coverage:
 nosetests --exe --with-coverage
 ```
 
+to run and store the test results for further examination (e.g. build pipeline)
+```
+nosetests --exe --with-xunit
+behave --junit
+```
+
 Run behave tests with coverage:
 ```
 https://stackoverflow.com/a/37447392/736079

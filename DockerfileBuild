@@ -1,0 +1,16 @@
+FROM python:3.6
+LABEL author="Peter Götz (peter.goetz@pgoetz.de)"
+
+WORKDIR /torpydo
+
+ENV PYTHONPATH=/torpydo
+
+COPY requirements.txt /torpydo
+COPY features/ /torpydo/features
+COPY tests/ /torpydo/tests
+COPY torpydo/ /torpydo/torpydo
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+CMD cd torpydo && python -m torpydo
