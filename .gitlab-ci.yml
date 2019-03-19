@@ -1,0 +1,67 @@
+image: python:3.6
+
+stages: 
+  - unit-test
+  - acceptance-test
+  - analysis
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+
+unit test:
+  stage: unit-test
+  cache:
+    paths:
+      - .cache/pip
+      - venv/
+  before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  script:
+  - nosetests --exe
+  tags:
+  - python
+
+acceptance test: 
+  stage: acceptance-test
+  cache:
+    paths:
+      - .cache/pip
+      - venv/
+  before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  script: 
+  - behave
+  tags:
+  - python
+
+sonar:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: $$$SONAR_URL$$$
+    SONAR_SOURCES: .
+    SONAR_ANALYSIS_MODE: issues
+  script:
+  - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
+  tags:
+  - python
+
+sonar-reports:
+  stage: analysis
+  image: ciricihq/gitlab-sonar-scanner
+  variables:
+    SONAR_URL: $$$SONAR_URL$$$
+    SONAR_SOURCES: .
+    SONAR_ANALYSIS_MODE: publish
+  script:
+  - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
+  tags:
+  - python
