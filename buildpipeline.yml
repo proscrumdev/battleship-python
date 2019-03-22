@@ -1,31 +1,65 @@
-# Docker image
-# Build a Docker image to deploy, run, or push to a container registry.
-# Add steps that use Docker Compose, tag images, push to a registry, run an image, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
 - master
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+jobs:
 
-variables:
-  imageName: 'torpydo:$(build.buildId)'
+- job: 'Test'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
+    maxParallel: 2
 
-steps:
-- script: docker login -u $(dockerId) -p $(pswd) $(repo)
-- script: docker build -f DockerfileBuild -t $(repo)/$(dockerId)/$(imageName) .
-  displayName: 'docker build'
-- script: docker run -v ${PWD}:/torpydo $(repo)/$(dockerId)/$(imageName) nosetests --exe --with-xunit 
-  displayName: 'Run unit tests'
-- script: docker run -v ${PWD}:/torpydo $(repo)/$(dockerId)/$(imageName) behave --junit 
-  displayName: 'Run behave tests'
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFiles: '**/*.xml'
-    testRunTitle: 'Publish test results for Python $(python.version)'
-    testResultsFormat: JUnit
-  displayName: 'Publish Test Results'
-- script: docker push $(repo)/$(dockerId)/$(imageName)
-  displayName: 'docker push'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: 'x64'
+
+  - script: python -m pip install --upgrade pip && pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: nosetests --exe --with-xunit 
+    displayName: 'Run unit tests'
+  - script: behave --junit 
+    displayName: 'Run behave tests'
+    
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: '**/*.xml'
+      testRunTitle: 'Publish test results for Python $(python.version)'
+      testResultsFormat: JUnit
+    displayName: 'Publish Test Results'
+
+- job: 'Publish'
+  dependsOn: 'Test'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      architecture: 'x64'
+
+  - script: python -m pip install --upgrade pip && pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: python setup.py sdist --formats=gztar,zip
+    displayName: 'Build sdist'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: 'dist'
+    condition: succeededOrFailed()
