@@ -1,0 +1,3 @@
+recursive-include torpydo *.py
+recursive-include tests *.*
+recursive-include features *.*
