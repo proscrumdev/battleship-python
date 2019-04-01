@@ -22,8 +22,6 @@ unit test:
   - pip install -r requirements.txt
   script:
   - nosetests --exe
-  tags:
-  - python
 
 acceptance test: 
   stage: acceptance-test
@@ -39,8 +37,6 @@ acceptance test:
   - pip install -r requirements.txt
   script: 
   - behave
-  tags:
-  - python
 
 sonar:
   stage: analysis
@@ -51,8 +47,6 @@ sonar:
     SONAR_ANALYSIS_MODE: issues
   script:
   - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
-  tags:
-  - python
 
 sonar-reports:
   stage: analysis
@@ -63,5 +57,4 @@ sonar-reports:
     SONAR_ANALYSIS_MODE: publish
   script:
   - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
-  tags:
-  - python
+
