@@ -8,27 +8,30 @@ stages:
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
 
+cache: 
+  paths: 
+    - .cache/pip
+    - venv
+
 unit test:
   stage: unit-test
-  cache:
-    paths:
-      - .cache/pip
-      - venv/
   before_script:
   - python -V
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
-  script:
-  - nosetests --exe
+  - nosetests --exe --with-coverage --cover-xml --with-xunit
+  artifacts:
+    paths: 
+      - nosetests.xml
+      - coverage.xml
+    expire_in: 1 week
+    reports:
+      junit: nosetests.xml
 
 acceptance test: 
   stage: acceptance-test
-  cache:
-    paths:
-      - .cache/pip
-      - venv/
   before_script:
   - python -V
   - pip install virtualenv
@@ -40,21 +43,7 @@ acceptance test:
 
 sonar:
   stage: analysis
-  image: ciricihq/gitlab-sonar-scanner
-  variables:
-    SONAR_URL: $$$SONAR_URL$$$
-    SONAR_SOURCES: .
-    SONAR_ANALYSIS_MODE: issues
+  image: mercuriete/sonar-scanner
   script:
-  - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
-
-sonar-reports:
-  stage: analysis
-  image: ciricihq/gitlab-sonar-scanner
-  variables:
-    SONAR_URL: $$$SONAR_URL$$$
-    SONAR_SOURCES: .
-    SONAR_ANALYSIS_MODE: publish
-  script:
-  - gitlab-sonar-scanner -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$
+  - sonar-scanner -Dsonar.host.url=$$$SONAR_URL$$$ -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$ -Dsonar.sources=torpydo,tests,features -Dsonar.python.xunit.reportPath=nosetests.xml -Dsonar.python.coverage.reportPaths=coverage.xml
 

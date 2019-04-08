@@ -21,3 +21,9 @@ build/
 # Visual Studio (code)
 .vs*
 /reports
+
+# Tests
+nosetests.xml
+coverage.xml
+.coverage
+
