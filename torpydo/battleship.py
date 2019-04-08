@@ -83,7 +83,7 @@ def parse_position(input: str):
     number = int(input[1:])
     position = Position(letter, number)
 
-    return position
+    return Position(letter, number)
 
 def get_random_position():
     rows = 8
