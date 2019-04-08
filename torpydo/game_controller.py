@@ -26,7 +26,9 @@ class GameController(object):
             Ship("Patrol Boat", 2, Color.ORANGE)]
 
     def is_ship_valid(ship: Ship):
-        return len(ship.positions) == ship.size
+        is_valid = len(ship.positions) == ship.size
+        
+        return is_valid
 
     def get_random_position(size: int):
         letter = random.choice(list(Letter))

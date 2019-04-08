@@ -21,6 +21,7 @@ class Position(object):
     def __init__(self, column: Letter, row: int):
         self.column = column
         self.row = row
+        return self
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
