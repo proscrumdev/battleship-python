@@ -21,6 +21,7 @@ unit test:
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
+  script:
   - nosetests --exe --with-coverage --cover-xml --with-xunit
   artifacts:
     paths: 
