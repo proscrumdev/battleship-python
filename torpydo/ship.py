@@ -40,6 +40,7 @@ class Ship(object):
     def add_position(self, input: str):
         letter = Letter[input.upper()[:1]]
         number = int(input[1:])
+        position = Position(letter, number)
 
         self.positions.append(Position(letter, number))
 

@@ -33,5 +33,6 @@ class GameController(object):
     def get_random_position(size: int):
         letter = random.choice(list(Letter))
         number = random.randrange(size)
+        position = Position(letter, number)
 
-        return Position(letter, number)
+        return position

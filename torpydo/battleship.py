@@ -6,8 +6,8 @@ from colorama import Fore, Back, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
 
-my_fleet = []
-enemy_fleet = []
+myFleet = []
+enemyFleet = []
 
 def main():
     colorama.init()
@@ -31,7 +31,7 @@ def main():
     start_game()
 
 def start_game():
-    global my_fleet, enemy_fleet
+    global myFleet, enemyFleet
 
     print(r'''
                   __
@@ -49,7 +49,7 @@ def start_game():
         print()
         print("Player, it's your turn")
         position = parse_position(input("Enter coordinates for your shot :"))
-        is_hit = GameController.check_is_hit(enemy_fleet, position)
+        is_hit = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
             print(r'''
                 \          .  ./
@@ -64,7 +64,7 @@ def start_game():
         print("Yeah ! Nice hit !" if is_hit else "Miss")
 
         position = get_random_position()
-        is_hit = GameController.check_is_hit(my_fleet, position)
+        is_hit = GameController.check_is_hit(myFleet, position)
         print()
         print(f"Computer shoot in {position.column.name}{position.row} and {'hit your ship!' if is_hit else 'miss'}")
         if is_hit:
@@ -81,8 +81,9 @@ def start_game():
 def parse_position(input: str):
     letter = Letter[input.upper()[:1]]
     number = int(input[1:])
+    position = Position(letter, number)
 
-    return Position(letter, number)
+    return position
 
 def get_random_position():
     rows = 8
@@ -90,22 +91,23 @@ def get_random_position():
 
     letter = Letter(random.randint(1, lines))
     number = random.randint(1, rows)
+    position = Position(letter, number)
 
-    return Position(letter, number)
+    return position
 
 def initialize_game():
-    initialize_my_fleet()
+    initialize_myFleet()
 
-    initialize_enemy_fleet()
+    initialize_enemyFleet()
 
-def initialize_my_fleet():
-    global my_fleet
+def initialize_myFleet():
+    global myFleet
 
-    my_fleet = GameController.initialize_ships()
+    myFleet = GameController.initialize_ships()
 
     print("Please position your fleet (Game board has size from A to H and 1 to 8) :")
 
-    for ship in my_fleet:
+    for ship in myFleet:
         print()
         print(f"Please enter the positions for the {ship.name} (size: {ship.size})")
 
@@ -114,32 +116,32 @@ def initialize_my_fleet():
 
             ship.add_position(position_input)
 
-def initialize_enemy_fleet():
-    global enemy_fleet
+def initialize_enemyFleet():
+    global enemyFleet
 
-    enemy_fleet = GameController.initialize_ships()
+    enemyFleet = GameController.initialize_ships()
 
-    enemy_fleet[0].positions.append(Position(Letter.B, 4))
-    enemy_fleet[0].positions.append(Position(Letter.B, 5))
-    enemy_fleet[0].positions.append(Position(Letter.B, 6))
-    enemy_fleet[0].positions.append(Position(Letter.B, 7))
-    enemy_fleet[0].positions.append(Position(Letter.B, 8))
+    enemyFleet[0].positions.append(Position(Letter.B, 4))
+    enemyFleet[0].positions.append(Position(Letter.B, 5))
+    enemyFleet[0].positions.append(Position(Letter.B, 6))
+    enemyFleet[0].positions.append(Position(Letter.B, 7))
+    enemyFleet[0].positions.append(Position(Letter.B, 8))
 
-    enemy_fleet[1].positions.append(Position(Letter.E, 6))
-    enemy_fleet[1].positions.append(Position(Letter.E, 7))
-    enemy_fleet[1].positions.append(Position(Letter.E, 8))
-    enemy_fleet[1].positions.append(Position(Letter.E, 9))
+    enemyFleet[1].positions.append(Position(Letter.E, 6))
+    enemyFleet[1].positions.append(Position(Letter.E, 7))
+    enemyFleet[1].positions.append(Position(Letter.E, 8))
+    enemyFleet[1].positions.append(Position(Letter.E, 9))
 
-    enemy_fleet[2].positions.append(Position(Letter.A, 3))
-    enemy_fleet[2].positions.append(Position(Letter.B, 3))
-    enemy_fleet[2].positions.append(Position(Letter.C, 3))
+    enemyFleet[2].positions.append(Position(Letter.A, 3))
+    enemyFleet[2].positions.append(Position(Letter.B, 3))
+    enemyFleet[2].positions.append(Position(Letter.C, 3))
 
-    enemy_fleet[3].positions.append(Position(Letter.F, 8))
-    enemy_fleet[3].positions.append(Position(Letter.G, 8))
-    enemy_fleet[3].positions.append(Position(Letter.H, 8))
+    enemyFleet[3].positions.append(Position(Letter.F, 8))
+    enemyFleet[3].positions.append(Position(Letter.G, 8))
+    enemyFleet[3].positions.append(Position(Letter.H, 8))
 
-    enemy_fleet[4].positions.append(Position(Letter.C, 5))
-    enemy_fleet[4].positions.append(Position(Letter.C, 6))
+    enemyFleet[4].positions.append(Position(Letter.C, 5))
+    enemyFleet[4].positions.append(Position(Letter.C, 6))
 
 if __name__ == '__main__':
     main()
