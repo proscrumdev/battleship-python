@@ -45,5 +45,5 @@ sonar:
   stage: analysis
   image: mercuriete/sonar-scanner
   script:
-  - sonar-scanner -Dsonar.host.url=$$$SONAR_URL$$$ -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$ -Dsonar.sources=torpydo,tests,features -Dsonar.python.xunit.reportPath=nosetests.xml -Dsonar.python.coverage.reportPaths=coverage.xml
+  - sonar-scanner -Dsonar.host.url=$$$SONAR_URL$$$ -Dsonar.projectKey=$$$SONAR_PROJECT_KEY$$$ -Dsonar.projectName=$$$SONAR_PROJECT_KEY$$$ -Dsonar.sources=torpydo,tests,features -Dsonar.python.xunit.reportPath=nosetests.xml -Dsonar.python.coverage.reportPaths=coverage.xml
 
