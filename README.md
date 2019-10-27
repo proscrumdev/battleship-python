@@ -1,4 +1,4 @@
-[![Build status](https://psdstewards.visualstudio.com/PSD/_apis/build/status/proscrumdev.battleship-python-CI)](https://psdstewards.visualstudio.com/PSD/_build/latest?definitionId=16)
+[![Build status](https://psdstewards.visualstudio.com/PSD/_apis/build/status/proscrumdev.battleship-cpp-CI)](https://psdstewards.visualstudio.com/PSD/_build/latest?definitionId=18)
 
 # Torpydo
 
