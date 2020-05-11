@@ -75,7 +75,7 @@ behave
 
 to run with coverage:
 ```
-nosetests --exe --with-coverage
+nosetests --exe --with-coverage --cover-package=torpydo
 ```
 
 to run and store the test results for further examination (e.g. build pipeline)
