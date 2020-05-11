@@ -6,7 +6,7 @@ A simple game of Battleship, written in Python.
 
 # Getting started
 
-This project requires Python 3.6. To prepare to work with it, pick one of these
+This project requires Python 3.6 or newer. To prepare to work with it, pick one of these
 options:
 
 ## Linux and macOS
