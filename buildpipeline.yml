@@ -30,7 +30,7 @@ jobs:
 
   - script: nosetests --exe --with-xunit 
     displayName: 'Run unit tests'
-  - script: nosetests --cover-package torpydo --exe --with-coverage  --cover-html
+  - script: nosetests --cover-package torpydo --exe --with-coverage --cover-xml
     displayName: 'Create Code Coverage'
   - script: behave --junit 
     displayName: 'Run behave tests'
@@ -42,7 +42,15 @@ jobs:
       testRunTitle: 'Publish test results for Python $(python.version)'
       testResultsFormat: JUnit
     displayName: 'Publish Test Results'
-
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'cobertura'
+      summaryFileLocation: coverage.xml
+      #pathToSources: # Optional
+      #reportDirectory: # Optional
+      #additionalCodeCoverageFiles: # Optional
+      #failIfCoverageEmpty: false # Optional
+      
 - job: 'Publish'
   dependsOn: 'Test'
   pool:
