@@ -1,6 +1,7 @@
 import random
-
+import os
 import colorama
+import platform
 from colorama import Fore, Back, Style
 
 from torpydo.ship import Color, Letter, Position, Ship
@@ -10,6 +11,7 @@ myFleet = []
 enemyFleet = []
 
 def main():
+
     colorama.init()
     print(Fore.YELLOW + r"""
                                     |__
@@ -32,7 +34,12 @@ def main():
 
 def start_game():
     global myFleet, enemyFleet
-
+    # clear the screen
+    if(platform.system().lower()=="windows"):
+        cmd='cls'
+    else:
+        cmd='clear'   
+    os.system(cmd)
     print(r'''
                   __
                  /  \
