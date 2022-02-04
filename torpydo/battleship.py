@@ -2,16 +2,20 @@ import random
 import os
 import colorama
 import platform
-from colorama import Fore, Back, Style
 
+from colorama import Fore, Back, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
+from torpydo.telemetryclient import TelemetryClient
+
+print("Starting")
 
 myFleet = []
 enemyFleet = []
 
 def main():
-
+    TelemetryClient.init()
+    TelemetryClient.trackEvent('ApplicationStarted', {'custom_dimensions': {'Technology': 'Python'}})
     colorama.init()
     print(Fore.YELLOW + r"""
                                     |__
@@ -69,11 +73,13 @@ def start_game():
                    \  \   /  /''')
 
         print("Yeah ! Nice hit !" if is_hit else "Miss")
+        TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
         position = get_random_position()
         is_hit = GameController.check_is_hit(myFleet, position)
         print()
-        print(f"Computer shoot in {position.column.name}{position.row} and {'hit your ship!' if is_hit else 'miss'}")
+        print(f"Computer shoot in {str(position)} and {'hit your ship!' if is_hit else 'miss'}")
+        TelemetryClient.trackEvent('Computer_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
         if is_hit:
             print(r'''
                 \          .  ./
@@ -119,9 +125,9 @@ def initialize_myFleet():
         print(f"Please enter the positions for the {ship.name} (size: {ship.size})")
 
         for i in range(ship.size):
-            position_input = input(f"Enter position {i} of {ship.size} (i.e A3):")
-
+            position_input = input(f"Enter position {i+1} of {ship.size} (i.e A3):")
             ship.add_position(position_input)
+            TelemetryClient.trackEvent('Player_PlaceShipPosition', {'custom_dimensions': {'Position': position_input, 'Ship': ship.name, 'PositionInShip': i}})
 
 def initialize_enemyFleet():
     global enemyFleet
