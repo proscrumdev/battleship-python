@@ -88,3 +88,10 @@ Run behave tests with coverage:
 ```
 https://stackoverflow.com/a/37447392/736079
 ```
+
+# Telemetry data
+This application is collecting telemetry data with Microsoft Application Insights.
+For more details see https://docs.microsoft.com/en-us/azure/azure-monitor/app/opencensus-python.
+
+To send the telemetry data to a specific instance of Application Insights, the connection string has to be adjusted in telemetryclient.py
+
