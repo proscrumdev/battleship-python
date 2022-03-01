@@ -75,6 +75,13 @@ def start_game():
                    \  \   /  /''', color=BColors.RED)
 
         print_with_color("Yeah ! Nice hit !" if is_hit else "Miss", color=BColors.RED if is_hit else BColors.BLUE)
+        if is_hit:
+            GameController.remove_if_hit(enemyFleet, position)
+        else:
+            if GameController.check_ship_sunk(enemyFleet, position):
+                print(Fore.YELLOW + "Left Over Ships : " + Style.RESET_ALL)
+                GameController.print_left_over_ships(enemyFleet)
+
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
         position = get_random_position()
