@@ -7,6 +7,7 @@ from colorama import Fore, Back, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
 from torpydo.telemetryclient import TelemetryClient
+from torpydo.utils import print_with_color, BColors
 
 print("Starting")
 
@@ -58,11 +59,12 @@ def start_game():
 
     while True:
         print()
-        print("Player, it's your turn")
-        position = parse_position(input("Enter coordinates for your shot :"))
+        print_with_color("Player, it's your turn", color=BColors.CYAN)
+        print_with_color("Keep in mind: The game board has size from A to H and 1 to 8", color=BColors.CYAN)
+        position = parse_position(input("Enter coordinates for your shot (i.e A3):"))
         is_hit = GameController.check_is_hit(enemyFleet, position)
         if is_hit:
-            print(r'''
+            print_with_color(r'''
                 \          .  ./
               \   .:"";'.:..""   /
                  (M^^.^~~:.'"").
@@ -70,18 +72,21 @@ def start_game():
                ((| :. ~ ^  :. .|))
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
-                   \  \   /  /''')
+                   \  \   /  /''', color=BColors.RED)
 
-        print("Yeah ! Nice hit !" if is_hit else "Miss")
+        print_with_color("Yeah ! Nice hit !" if is_hit else "Miss", color=BColors.RED if is_hit else BColors.BLUE)
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
         position = get_random_position()
         is_hit = GameController.check_is_hit(myFleet, position)
         print()
-        print(f"Computer shoot in {str(position)} and {'hit your ship!' if is_hit else 'miss'}")
-        TelemetryClient.trackEvent('Computer_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
+        print_with_color(
+            f"Computer shoot in {str(position)} and {'hit your ship!' if is_hit else 'miss'}",
+            color=BColors.RED if is_hit else BColors.BLUE
+        ) 
+
         if is_hit:
-            print(r'''
+            print_with_color(r'''
                 \          .  ./
               \   .:"";'.:..""   /
                  (M^^.^~~:.'"").
@@ -89,7 +94,10 @@ def start_game():
                ((| :. ~ ^  :. .|))
             -   (\- |  \ /  |  /)  -
                  -\  \     /  /-
-                   \  \   /  /''')
+                   \  \   /  /''', color=BColors.RED)
+
+
+        TelemetryClient.trackEvent('Computer_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
 
 def parse_position(input: str):
     letter = Letter[input.upper()[:1]]
@@ -118,11 +126,11 @@ def initialize_myFleet():
 
     myFleet = GameController.initialize_ships()
 
-    print("Please position your fleet (Game board has size from A to H and 1 to 8) :")
+    print_with_color("Please position your fleet (Game board has size from A to H and 1 to 8) :", color=BColors.CYAN)
 
     for ship in myFleet:
         print()
-        print(f"Please enter the positions for the {ship.name} (size: {ship.size})")
+        print_with_color(f"Please enter the positions for the {ship.name} (size: {ship.size})", color=BColors.CYAN)
 
         for i in range(ship.size):
             position_input = input(f"Enter position {i+1} of {ship.size} (i.e A3):")
