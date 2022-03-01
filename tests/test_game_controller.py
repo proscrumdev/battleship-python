@@ -10,6 +10,7 @@ class TestShip(unittest.TestCase):
 
     def test_check_is_hit_true(self):
         self.assertTrue(GameController.check_is_hit(self.ships, Position(Letter.A, 1)))
+        self.assertTrue(self.ships[0].positions[0].is_shot)
 
     def test_check_is_hit_false(self):
         self.assertFalse(GameController.check_is_hit(self.ships, Position(Letter.B, 1)))
