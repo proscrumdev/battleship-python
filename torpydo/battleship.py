@@ -3,7 +3,7 @@ import os
 import colorama
 import platform
 
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
 from torpydo.telemetryclient import TelemetryClient
@@ -91,9 +91,6 @@ def start_game():
         start_colouring(right_colour(is_hit))
         print("Yeah ! Nice hit !" if is_hit else "Miss")
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
-        if is_fleet_down(enemyFleet):
-            print("Congratulations! You are the winner \o/")
-            break
 
         print( r'''
             \          .  ./
@@ -106,6 +103,11 @@ def start_game():
                \  \   /  /''')
 
         end_colouring()
+        if is_fleet_down(enemyFleet):
+            start_colouring(Fore.MAGENTA)
+            print("Congratulations! You are the winner \o/")
+            end_colouring()
+            break
 
         print("\n\nComputer is thinking...")
         time.sleep(3)
@@ -128,7 +130,9 @@ def start_game():
                \  \   /  /''')
         end_colouring()
         if is_fleet_down(myFleet):
+            start_colouring(Fore.LIGHTRED_EX)
             print("Sorry, you lost...")
+            end_colouring()
             break
 
     print("Thank you for playing!")
