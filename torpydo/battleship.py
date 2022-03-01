@@ -76,7 +76,8 @@ def start_game():
 
         start_colouring(Fore.GREEN)
         print("Player, it's your turn")
-        position = parse_position(input("Enter coordinates for your shot :"))
+        print("Coordinates should be written in the following format 'LetterNumber' as in C1, F4")
+        position = parse_position(input("Enter coordinates (A-H, 1-8) for your shot :"))
         end_colouring()
 
         is_hit = GameController.check_is_hit(enemyFleet, position)
@@ -146,7 +147,7 @@ def initialize_myFleet():
 
     myFleet = GameController.initialize_ships()
 
-    quick_and_dirty = False
+    quick_and_dirty = True
     if quick_and_dirty:
         myFleet[0].positions.append(Position(Letter.B, 4))
         myFleet[0].positions.append(Position(Letter.B, 5))
