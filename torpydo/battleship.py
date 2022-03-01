@@ -13,6 +13,7 @@ print("Starting")
 
 myFleet = []
 enemyFleet = []
+BAD_POSITION_INPUT_MSG = "The position is invalid. Please try enter a letter and a number like: 'A1'"
 
 
 def main():
@@ -78,7 +79,11 @@ def start_game():
         start_colouring(Fore.GREEN)
         print("Player, it's your turn")
         print("Coordinates should be written in the following format 'LetterNumber' as in C1, F4")
-        position = parse_position(input("Enter coordinates (A-H, 1-8) for your shot :"))
+        try:
+            position = parse_position(check_position_input("Enter coordinates (A-H, 1-8) for your shot :"))
+        except Exception:
+            print(BAD_POSITION_INPUT_MSG)
+            continue
         end_colouring()
 
         is_hit = GameController.check_is_hit(enemyFleet, position)
@@ -188,9 +193,16 @@ def initialize_myFleet():
             print()
             print(f"Please enter the positions for the {ship.name} (size: {ship.size})")
 
-            for i in range(ship.size):
-                position_input = input(f"Enter position {i+1} of {ship.size} (i.e A3):")
+        i = 0
+        while i < ship.size:
+            try:
+                position_input = check_position_input(f"Enter position {i+1} of {ship.size} (i.e A3):")
+            except Exception:
+                print(BAD_POSITION_INPUT_MSG)
+                continue
+            else:
                 ship.add_position(position_input)
+                i += 1
                 TelemetryClient.trackEvent('Player_PlaceShipPosition', {'custom_dimensions': {'Position': position_input, 'Ship': ship.name, 'PositionInShip': i}})
 
 def initialize_enemyFleet():
@@ -219,6 +231,12 @@ def initialize_enemyFleet():
 
     enemyFleet[4].positions.append(Position(Letter.C, 5))
     enemyFleet[4].positions.append(Position(Letter.C, 6))
+
+def check_position_input(msg: str):
+    string = input(msg)
+    assert len(string) == 2 and string[0].isalpha() and string[1:].isnumeric()
+    return string
+
 
 if __name__ == '__main__':
     main()
