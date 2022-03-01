@@ -1,4 +1,5 @@
 import random
+from colorama import Fore, Back, Style
 
 from torpydo.ship import Color, Letter, Position, Ship
 
@@ -36,3 +37,22 @@ class GameController(object):
         position = Position(letter, number)
 
         return position
+
+    def remove_if_hit(ships: list, shot: Position):
+        for ship in ships:
+            for position in ship.positions:
+                if position == shot:
+                    # position = ''
+                    ship.positions.remove(position)
+
+    def check_ship_sunk(ships: list, shot: Position):
+        for ship in ships:
+            if len(ship.positions) == 0:
+                ships.remove(ship)
+                print(Fore.YELLOW + "{} has been sunk already. ".format(ship.name) + Style.RESET_ALL)
+                return True
+        return False
+
+    def print_left_over_ships(ships: list):
+        for ship in ships:
+            print(Fore.GREEN + ship.name + Style.RESET_ALL)
