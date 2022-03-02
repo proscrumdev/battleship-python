@@ -21,9 +21,13 @@ class Position(object):
     def __init__(self, column: Letter, row: int):
         self.column = column
         self.row = row
+        self.is_shot = False
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.column == other.column and self.row == other.row
+
+    def __hash__(self):
+        return hash(f"{self.column}_{self.row}")
 
     def __str__(self):
         return f"{self.column.name}{self.row}"
@@ -36,13 +40,16 @@ class Ship(object):
         self.size = size
         self.color = color
         self.positions = []
+        self.is_sunk = False
 
     def add_position(self, input: str):
         letter = Letter[input.upper()[:1]]
         number = int(input[1:])
-        position = Position(letter, number)
 
         self.positions.append(Position(letter, number))
+
+    def check_sunk(self):
+        self.is_sunk = all(position.is_shot for position in self.positions)
 
     def __str__(self):
         return f"{self.color.name} {self.name} ({self.size}): {self.positions}"

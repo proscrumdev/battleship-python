@@ -13,6 +13,8 @@ class GameController(object):
         for ship in ships:
             for position in ship.positions:
                 if position == shot:
+                    position.is_shot = True
+                    ship.check_sunk()
                     return True
 
         return False
@@ -27,7 +29,7 @@ class GameController(object):
 
     def is_ship_valid(ship: Ship):
         is_valid = len(ship.positions) == ship.size
-        
+
         return is_valid
 
     def get_random_position(size: int):

@@ -4,3 +4,5 @@ pylint==1.7.4
 coverage==4.4.2
 colorama==0.3.9
 opencensus-ext-azure==1.1.1
+playsound
+PyObjC
