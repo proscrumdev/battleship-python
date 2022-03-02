@@ -148,9 +148,9 @@ def start_game():
 
 def is_hit_sound(is_hit):
     if is_hit:
-        playsound("sound/explosion.mp3")
+        playsound("sound/explosion2.mp3", block=False)
     else:
-        playsound("sound/splash.mp3")
+        playsound("sound/splash2.mp3", block=False)
 
 def is_fleet_down(fleet):
     return all(ship.is_sunk for ship in fleet)
