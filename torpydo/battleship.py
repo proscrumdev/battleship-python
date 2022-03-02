@@ -209,32 +209,73 @@ def initialize_myFleet():
                 i += 1
                 TelemetryClient.trackEvent('Player_PlaceShipPosition', {'custom_dimensions': {'Position': position_input, 'Ship': ship.name, 'PositionInShip': i}})
 
+
+def overlaps(positions, fleet:List[Ship]):
+    for ship in fleet:
+        for ship_pos in ship.positions:
+            if ship_pos in positions:
+                return True
+    return False
+
+def set_forward_rear(ship_size, init_value, max_size) -> int:
+    if init_value + ship_size - 1 > max_size:
+        if init_value - ship_size + 1 > 0:
+            return -1
+        else:
+            return 0
+    else:
+        return 1
+
+
+def set_direction(random_position:Position) -> Tuple[str,int]:
+    if random_position.row % 2:
+        axis = "horizontal"
+        st_value = random_position.column.value
+    else:
+        axis = "vertical"
+        st_value = random_position.row
+    return axis, st_value
+
+def place_this_ship(ship:Ship, st_point:Position, enemyFleet:List[Ship]):
+    # Take a direction: either vertical or horizontal:
+    positions = []
+    positions.append(st_point)
+
+    axis, st_value = set_direction(st_point)
+    factor = set_forward_rear(ship.size, st_value, 8)
+
+    if factor:
+        for i in range(1,ship.size):
+            if axis == "horizontal":
+                column = Letter(st_point.column.value + (i * factor))
+                row = st_point.row
+            else:
+                column = st_point.column
+                row = st_point.row + (i * factor)
+            positions.append(Position(row=row,column=column))
+    else:
+        return False
+
+    if not overlaps(positions,enemyFleet):
+        # insert positions into the ship
+        for p in positions:
+            ship.positions.append(p)
+        return True
+    else:
+        return False
+
 def initialize_enemyFleet():
     global enemyFleet
 
     enemyFleet = GameController.initialize_ships()
 
-    enemyFleet[0].positions.append(Position(Letter.B, 4))
-    enemyFleet[0].positions.append(Position(Letter.B, 5))
-    enemyFleet[0].positions.append(Position(Letter.B, 6))
-    enemyFleet[0].positions.append(Position(Letter.B, 7))
-    enemyFleet[0].positions.append(Position(Letter.B, 8))
+    for ship in enemyFleet:
+        ship_strating_point = get_random_position()
+        while not place_this_ship(ship,ship_strating_point, enemyFleet):
+            ship_strating_point = get_random_position()
 
-    enemyFleet[1].positions.append(Position(Letter.E, 6))
-    enemyFleet[1].positions.append(Position(Letter.E, 7))
-    enemyFleet[1].positions.append(Position(Letter.E, 8))
-    enemyFleet[1].positions.append(Position(Letter.E, 9))
 
-    enemyFleet[2].positions.append(Position(Letter.A, 3))
-    enemyFleet[2].positions.append(Position(Letter.B, 3))
-    enemyFleet[2].positions.append(Position(Letter.C, 3))
-
-    enemyFleet[3].positions.append(Position(Letter.F, 8))
-    enemyFleet[3].positions.append(Position(Letter.G, 8))
-    enemyFleet[3].positions.append(Position(Letter.H, 8))
-
-    enemyFleet[4].positions.append(Position(Letter.C, 5))
-    enemyFleet[4].positions.append(Position(Letter.C, 6))
+    # print(enemyFleet)
 
 def check_position_input(msg: str):
     string = input(msg)
