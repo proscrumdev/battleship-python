@@ -178,9 +178,11 @@ def get_random_position(board: list):
             return position
 
 def initialize_game():
-    initialize_myFleet()
 
     initialize_enemyFleet()
+    initialize_myFleet()
+
+    
 
 def initialize_myFleet():
     global myFleet
@@ -285,18 +287,28 @@ def place_this_ship(ship:Ship, st_point:Position, enemyFleet:List[Ship]):
     else:
         return False
 
+def get_random_position_2():
+    rows = 8
+    lines = 8
+
+    letter = Letter(random.randint(1, lines))
+    number = random.randint(1, rows)
+    position = Position(letter, number)
+
+    return position
+
 def initialize_enemyFleet():
     global enemyFleet
 
     enemyFleet = GameController.initialize_ships()
 
     for ship in enemyFleet:
-        ship_strating_point = get_random_position()
+        ship_strating_point = get_random_position_2()
         while not place_this_ship(ship,ship_strating_point, enemyFleet):
-            ship_strating_point = get_random_position()
+            ship_strating_point = get_random_position_2()
 
 
-    # print(enemyFleet)
+    #print(enemyFleet)
 
 def check_position_input(msg: str):
     string = input(msg)
