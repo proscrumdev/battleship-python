@@ -8,7 +8,7 @@ from colorama import Fore, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
 from torpydo.telemetryclient import TelemetryClient
-
+from playsound import playsound
 import time
 
 myFleet = []
@@ -93,6 +93,7 @@ def start_game():
         is_hit = GameController.check_is_hit(enemyFleet, position)
         add_position_to_board(board, position, True)
 
+        is_hit_sound(is_hit)
         start_colouring(right_colour(is_hit))
         print("Yeah ! Nice hit !" if is_hit else "Miss")
         TelemetryClient.trackEvent('Player_ShootPosition', {'custom_dimensions': {'Position': str(position), 'IsHit': is_hit}})
@@ -109,6 +110,7 @@ def start_game():
 
         end_colouring()
         if is_fleet_down(enemyFleet):
+            playsound("sound/fireworks.mp3")
             start_colouring(Fore.MAGENTA)
             print("Congratulations! You are the winner \o/")
             end_colouring()
@@ -117,8 +119,9 @@ def start_game():
         print("\n\nComputer is thinking...")
         time.sleep(3)
         # Computer
-        position = get_random_position()
+        position = get_random_position(board)
         is_hit = GameController.check_is_hit(myFleet, position)
+        is_hit_sound(is_hit)
         add_position_to_board(board, position, True)
         start_colouring(right_colour(is_hit))
 
@@ -142,6 +145,12 @@ def start_game():
             break
 
     print("Thank you for playing!")
+
+def is_hit_sound(is_hit):
+    if is_hit:
+        playsound("sound/explosion.mp3")
+    else:
+        playsound("sound/splash.mp3")
 
 def is_fleet_down(fleet):
     return all(ship.is_sunk for ship in fleet)
@@ -182,7 +191,7 @@ def initialize_game():
     initialize_enemyFleet()
     initialize_myFleet()
 
-    
+
 
 def initialize_myFleet():
     global myFleet
@@ -287,25 +296,16 @@ def place_this_ship(ship:Ship, st_point:Position, enemyFleet:List[Ship]):
     else:
         return False
 
-def get_random_position_2():
-    rows = 8
-    lines = 8
-
-    letter = Letter(random.randint(1, lines))
-    number = random.randint(1, rows)
-    position = Position(letter, number)
-
-    return position
-
 def initialize_enemyFleet():
     global enemyFleet
+    global board
 
     enemyFleet = GameController.initialize_ships()
 
     for ship in enemyFleet:
-        ship_strating_point = get_random_position_2()
+        ship_strating_point = get_random_position(board)
         while not place_this_ship(ship,ship_strating_point, enemyFleet):
-            ship_strating_point = get_random_position_2()
+            ship_strating_point = get_random_position(board)
 
 
     #print(enemyFleet)
