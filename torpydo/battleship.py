@@ -3,6 +3,7 @@ import os
 import colorama
 import platform
 
+from typing import List, Tuple
 from colorama import Fore, Style
 from torpydo.ship import Color, Letter, Position, Ship
 from torpydo.game_controller import GameController
@@ -166,7 +167,7 @@ def initialize_myFleet():
 
     myFleet = GameController.initialize_ships()
 
-    quick_and_dirty = True
+    quick_and_dirty = False
     if quick_and_dirty:
         myFleet[0].positions.append(Position(Letter.B, 4))
         myFleet[0].positions.append(Position(Letter.B, 5))
@@ -197,17 +198,17 @@ def initialize_myFleet():
             print()
             print(f"Please enter the positions for the {ship.name} (size: {ship.size})")
 
-        i = 0
-        while i < ship.size:
-            try:
-                position_input = check_position_input(f"Enter position {i+1} of {ship.size} (i.e A3):")
-            except Exception:
-                print(BAD_POSITION_INPUT_MSG)
-                continue
-            else:
-                ship.add_position(position_input)
-                i += 1
-                TelemetryClient.trackEvent('Player_PlaceShipPosition', {'custom_dimensions': {'Position': position_input, 'Ship': ship.name, 'PositionInShip': i}})
+            i = 0
+            while i < ship.size:
+                try:
+                    position_input = check_position_input(f"Enter position {i+1} of {ship.size} (i.e A3):")
+                except Exception:
+                    print(BAD_POSITION_INPUT_MSG)
+                    continue
+                else:
+                    ship.add_position(position_input)
+                    i += 1
+                    TelemetryClient.trackEvent('Player_PlaceShipPosition', {'custom_dimensions': {'Position': position_input, 'Ship': ship.name, 'PositionInShip': i}})
 
 
 def overlaps(positions, fleet:List[Ship]):
