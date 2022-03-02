@@ -10,12 +10,15 @@ from torpydo.game_controller import GameController
 from torpydo.telemetryclient import TelemetryClient
 
 import time
-print("Starting")
 
 myFleet = []
 enemyFleet = []
+board = []
 BAD_POSITION_INPUT_MSG = "The position is invalid. Please try enter a letter and a number like: 'A1'"
+NUMBER_ROWS = 8
+NUMBER_COL = 8
 
+print("Starting")
 
 def main():
     TelemetryClient.init()
@@ -88,6 +91,7 @@ def start_game():
         end_colouring()
 
         is_hit = GameController.check_is_hit(enemyFleet, position)
+        add_position_to_board(board, position, True)
 
         start_colouring(right_colour(is_hit))
         print("Yeah ! Nice hit !" if is_hit else "Miss")
@@ -115,6 +119,7 @@ def start_game():
         # Computer
         position = get_random_position()
         is_hit = GameController.check_is_hit(myFleet, position)
+        add_position_to_board(board, position, True)
         start_colouring(right_colour(is_hit))
 
         print()
@@ -147,15 +152,30 @@ def parse_position(input: str):
 
     return Position(letter, number)
 
-def get_random_position():
-    rows = 8
-    lines = 8
+def add_position_to_board(board: list, position: Position, is_shot = None):
+    if is_shot is True:
+        position.is_shot = True
 
-    letter = Letter(random.randint(1, lines))
-    number = random.randint(1, rows)
-    position = Position(letter, number)
+    if position not in board:
+        board.append(position)
 
-    return position
+def get_random_position(board: list):
+    rows = NUMBER_ROWS
+    lines = NUMBER_COL
+
+    while True:
+        letter = Letter(random.randint(1, lines))
+        number = random.randint(1, rows)
+        position = Position(letter, number)
+        for pos in board:
+            if position == pos:
+                position = pos
+                break
+
+        add_position_to_board(board, position)
+        if not position.is_shot:
+            position.is_shot = True
+            return position
 
 def initialize_game():
     initialize_myFleet()

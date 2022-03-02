@@ -24,7 +24,10 @@ class Position(object):
         self.is_shot = False
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        return self.column == other.column and self.row == other.row
+
+    def __hash__(self):
+        return hash(f"{self.column}_{self.row}")
 
     def __str__(self):
         return f"{self.column.name}{self.row}"
