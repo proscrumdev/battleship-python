@@ -1,8 +1,7 @@
 [![Build status](https://dev.azure.com/APS-SD-Stewards/APS-SD/_apis/build/status/proscrumdev.battleship-python-CI)](https://dev.azure.com/APS-SD-Stewards/APS-SD/_build/latest?definitionId=16)
 
-# Torpydo
-
-A simple game of Battleship, written in Python.
+# Torpydo - Battleship Python
+A simple game of Battleship, written in Python. The purpose of this repository is to serve as an entry point into coding exercises and it was especially created for scrum.orgs Applying Professional Scrum for Software Development course (www.scrum.org/apssd). The code in this repository is unfinished by design.
 
 # Getting started
 
