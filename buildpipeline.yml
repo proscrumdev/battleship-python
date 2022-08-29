@@ -28,9 +28,9 @@ jobs:
   - script: python -m pip install --upgrade pip && pip install -r requirements.txt
     displayName: 'Install dependencies'
 
-  - script: nosetests --exe --with-xunit 
+  - script: nose2 -v --junit-xml --junit-xml-path nosetests.xml
     displayName: 'Run unit tests'
-  - script: nosetests --cover-package torpydo --exe --with-coverage --cover-xml
+  - script: nose2 -v --with-coverage --coverage ./torpydo --coverage-report xml
     displayName: 'Create Code Coverage'
   - script: behave --junit 
     displayName: 'Run behave tests'

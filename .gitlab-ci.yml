@@ -22,7 +22,7 @@ unit test:
   - source venv/bin/activate
   - pip install -r requirements.txt
   script:
-  - nosetests --exe --with-coverage --cover-xml --with-xunit
+  - nose2 -v --with-coverage --coverage ./torpydo --coverage-report xml --junit-xml --junit-xml-path nosetests.xml
   artifacts:
     paths: 
       - nosetests.xml

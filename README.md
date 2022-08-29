@@ -68,18 +68,18 @@ python torpydo/battleship.py
 # Running the Tests
 
 ```
-nosetests --exe
+nose2 -v
 behave
 ```
 
 to run with coverage:
 ```
-nosetests --cover-package torpydo --exe --with-coverage  --cover-html
+nose2 -v --with-coverage --coverage ./torpydo
 ```
 
 to run and store the test results for further examination (e.g. build pipeline)
 ```
-nosetests --exe --with-xunit
+nose2 --v --junit-xml --junit-xml-path xunit.xml
 behave --junit
 ```
 
