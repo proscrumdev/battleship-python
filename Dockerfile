@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.10
 LABEL author="Peter Götz (peter.goetz@pgoetz.de)"
 
 WORKDIR /torpydo
