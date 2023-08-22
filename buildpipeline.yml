@@ -65,8 +65,11 @@ jobs:
   - script: python -m pip install --upgrade pip && pip install -r requirements.txt
     displayName: 'Install dependencies'
 
-  - script: python setup.py sdist --formats=gztar,zip
-    displayName: 'Build sdist'
+  - script: python -m pip install pyinstaller
+    displayName: 'Install pyinstaller'
+
+  - script: pyinstaller --onefile start.py --name torpydo.exe
+    displayName: 'Build execution file'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
