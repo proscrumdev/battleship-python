@@ -10,11 +10,10 @@ jobs:
 
 - job: 'Test'
   pool:
-    vmImage: 'Ubuntu-latest'
+    #vmImage: 'Ubuntu-latest'
+    vmImage: 'windows-latest'
   strategy:
     matrix:
-      #Python36:
-      #  python.version: '3.6'
       Python38:
         python.version: '3.8'
     maxParallel: 2
@@ -54,7 +53,8 @@ jobs:
 - job: 'Publish'
   dependsOn: 'Test'
   pool:
-    vmImage: 'Ubuntu-latest'
+    #vmImage: 'Ubuntu-latest'
+    vmImage: 'windows-latest'
 
   steps:
   - task: UsePythonVersion@0
