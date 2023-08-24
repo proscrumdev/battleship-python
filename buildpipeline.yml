@@ -8,8 +8,9 @@ trigger:
 
 jobs:
 
-- job: 'Test'
+- job: 'Build'
   pool:
+    # Select here which plattform to build on. The resulting executable will be targeting for this plattform
     #vmImage: 'Ubuntu-latest'
     vmImage: 'windows-latest'
   strategy:
@@ -49,26 +50,12 @@ jobs:
       #reportDirectory: # Optional
       #additionalCodeCoverageFiles: # Optional
       #failIfCoverageEmpty: false # Optional
-      
-- job: 'Publish'
-  dependsOn: 'Test'
-  pool:
-    #vmImage: 'Ubuntu-latest'
-    vmImage: 'windows-latest'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      architecture: 'x64'
-
-  - script: python -m pip install --upgrade pip && pip install -r requirements.txt
-    displayName: 'Install dependencies'
 
   - script: python -m pip install pyinstaller
     displayName: 'Install pyinstaller'
 
-  - script: pyinstaller --onefile start.py --name torpydo.exe
+  # To include additional files in the executable, use --add-data "<SourceFile>;DestionationFile" on Windows and --add-data "<SourceFile>:DestionationFile" on Linux
+  - script: pyinstaller --onefile start.py --name torpydo.exe 
     displayName: 'Build execution file'
 
   - task: PublishBuildArtifacts@1
