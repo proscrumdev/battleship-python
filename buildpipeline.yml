@@ -54,10 +54,16 @@ jobs:
   - script: python -m pip install pyinstaller
     displayName: 'Install pyinstaller'
 
-  # To include additional files in the executable, use --add-data "<SourceFile>;DestionationFile" on Windows and --add-data "<SourceFile>:DestionationFile" on Linux
   - script: pyinstaller --onefile start.py --name torpydo.exe 
     displayName: 'Build execution file'
-
+    
+  # To include additional files needed to run the executable, copy them in the dist folder
+  #- task: CopyFiles@2
+  #  inputs:
+  #    Contents: '<file pattern>'
+  #    TargetFolder: 'dist'
+  #    OverWrite: true
+      
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
     inputs:
