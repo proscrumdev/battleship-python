@@ -3,6 +3,7 @@ image: python:3.10
 stages: 
   - unit-test
   - acceptance-test
+  - build
   - analysis
 
 variables:
@@ -41,6 +42,22 @@ acceptance test:
   - pip install -r requirements.txt
   script: 
   - behave
+
+build:
+  stage: build
+  before_script:
+  - python -V
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+  - pip install pyinstaller
+  script:
+  - pyinstaller start.py --name torpydo
+  artifacts:
+    paths:
+      - dist/start/
+    expire_in: 1 week
 
 sonar:
   stage: analysis
