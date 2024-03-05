@@ -56,7 +56,7 @@ build:
   - pyinstaller start.py --name torpydo
   artifacts:
     paths:
-      - dist/start/
+      - dist/torpydo/
     expire_in: 1 week
 
 sonar:
