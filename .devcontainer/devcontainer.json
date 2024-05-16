@@ -1,0 +1,15 @@
+{
+	"name": "Python",
+	"image": "mcr.microsoft.com/devcontainers/python:3.9-bullseye",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/python:1": {}
+	},
+	"postCreateCommand": "pip install -r requirements.txt"
+}

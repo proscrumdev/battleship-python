@@ -6,7 +6,8 @@
             "type": "debugpy",
             "request": "launch",
             "program": "torpydo",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "env": {"PYTHONPATH": "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}"}
         }
     ]
 }

@@ -4,3 +4,4 @@ pylint==2.16.1
 coverage==7.1.0
 colorama==0.4.6
 opencensus-ext-azure==1.1.8
+pytest==7.1.3
