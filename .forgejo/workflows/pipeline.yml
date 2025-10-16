@@ -1,0 +1,20 @@
+on: [push]
+jobs:
+  ci:
+    runs-on: docker
+    container:
+      image: pgoetz/forgejo-runner-container:latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          nose2 -v --with-coverage --coverage ./torpydo --coverage-report xml --junit-xml --junit-xml-path nosetests.xml
+          behave
+          flake8 --exit-zero torpydo
+          pyinstaller start.py --name torpydo
+      - uses: actions/upload-artifact@v3
+        with:
+          name: torpydo
+          path: dist/torpydo
